@@ -1,0 +1,95 @@
+﻿//Vista.cshtml
+
+@{
+    ViewBag.Title = "Vista";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card">
+    <div class="card-header">
+        <i class="fas fa-users me-1"></i> Lista de usuarios
+    </div>
+    <div class="card-body">
+        <table id="tabla" class="display cell-border" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>ID USUARIO</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Telefono</th>
+                    <th>UsuarioIngreso</th>
+                    <th>FechaIngreso</th>
+                    <th>UsuarioModificado</th>
+                    <th>FechaModificado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section scripts {
+    <script>
+    var tabladata;
+
+    tabladata = $("#tabla").DataTable({
+        responsive: true,
+        ordering: false,
+        "ajax": {
+            url: '@Url.Action("ListarUsuarios", "Home")',
+            type: "GET",
+            datatype: "json",
+            dataSrc: function(json) {
+                console.log(json); // Verificar la respuesta del servidor
+                return json.data;
+            }
+        },
+        "columns": [
+            { "data": "IdUsuario" },
+            { "data": "Nombre" },
+            { "data": "Correo" },
+            { "data": "Telefono" },
+            { "data": "UsuarioIngreso" },
+            {
+                "data": "FechaIngreso",
+                "render": function(data, type, row) {
+                    return formatJsonDate(data);
+                }
+            },
+            {
+                "data": "UsuarioModifico"
+            },
+            {
+                "data": "FechaModifico",
+                "render": function(data, type, row) {
+                    return formatJsonDate(data);
+                }
+            },
+            {
+                "defaultContent": '<button type="button" class="btn btn-primary btn-sm btn-editar"><i class="fas fa-pen me-1"></i></button>' +
+                                  '<button type="button" class="btn btn-danger btn-sm ms-2"><i class="fas fa-trash me-1"></i></button>',
+                "orderable": false,
+                "searchable": false,
+                "width": "90px"
+            }
+        ],
+        "language": {
+            url: '//cdn.datatables.net/plug-ins/2.0.7/i18n/es-ES.json'
+        }
+    });
+
+    function formatJsonDate(jsonDate) {
+        var date = new Date(parseInt(jsonDate.substr(6)));
+        var day = ("0" + date.getDate()).slice(-2);
+        var month = ("0" + (date.getMonth() + 1)).slice(-2);
+        var year = date.getFullYear();
+        return day + '/' + month + '/' + year;
+    }
+    </script>
+}
+
+
