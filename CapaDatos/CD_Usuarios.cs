@@ -44,7 +44,7 @@ namespace CapaDatos
                         }
 
                         // Verificar si se están leyendo registros
-                        System.Diagnostics.Debug.WriteLine($"Total registros leídos: {lista.Count}");
+                        System.Diagnostics.Debug.WriteLine($"Total registros leídos es: {lista.Count}");
                     }
                 }
             }
